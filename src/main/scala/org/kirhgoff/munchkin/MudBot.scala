@@ -10,18 +10,18 @@ class MudBot(hostname: String, port: Int) {
     newFixedThreadPool(2).asInstanceOf[ThreadPoolExecutor]
 
   val socket = new Socket(hostname, port)
-  val output = new PrintWriter (socket.getOutputStream)
-  val input = new BufferedReader(new InputStreamReader(socket.getInputStream))
+  val outputStream = socket.getOutputStream
+  val inputStream = socket.getInputStream
 
   def stop() = {
-    try { input.close() } catch { case e:Exception => e.printStackTrace()}
-    try { output.close() } catch { case e:Exception => e.printStackTrace()}
+    try { inputStream.close() } catch { case e:Exception => e.printStackTrace()}
+    try { outputStream.close() } catch { case e:Exception => e.printStackTrace()}
     try { socket.close() } catch { case e:Exception => e.printStackTrace()}
   }
 
   def startLoop() = {
-    executor.execute(new MudLorePrinter(input))
-    executor.execute(new UserCommandsReader(output))
+    executor.execute(new MudLorePrinter(inputStream))
+    executor.execute(new UserCommandsReader(outputStream))
 
     while (executor.getActiveCount == 2) {
       Thread.sleep(1000)
