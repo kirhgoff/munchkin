@@ -1,6 +1,5 @@
 package org.kirhgoff.munchkin
 
-import java.io.{BufferedReader, InputStreamReader, PrintWriter}
 import java.net.Socket
 import java.util.concurrent.Executors._
 import java.util.concurrent.ThreadPoolExecutor
@@ -20,8 +19,13 @@ class MudBot(hostname: String, port: Int) {
   }
 
   def startLoop() = {
-    executor.execute(new MudLorePrinter(inputStream))
-    executor.execute(new UserCommandsReader(outputStream))
+    val writer = new MudWriter(outputStream)
+    val ai = new FalloutBot (writer)
+    val inputReader = new UserInputReader(ai)
+    val reader = new MudReader(inputStream, ai)
+
+    executor.execute(reader)
+    executor.execute(inputReader)
 
     while (executor.getActiveCount == 2) {
       Thread.sleep(1000)

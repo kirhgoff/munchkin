@@ -8,6 +8,9 @@ repositories {
 }
 
 dependencies {
-    compile 'org.scala-lang:scala-library:2.11.7'
+    compile 'org.scala-lang:scala-library:2.11.8'
+
+    // https://mvnrepository.com/artifact/org.scalatest/scalatest_2.11
+    compile group: 'org.scalatest', name: 'scalatest_2.11', version: '3.0.1'
 }
 
