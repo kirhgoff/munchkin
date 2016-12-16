@@ -4,10 +4,16 @@ import org.scalatest._
 
 class MazeTest extends FlatSpec with Matchers {
 
-  "Maze" should "not allow " in {
+  "Maze" should "not allow initially incorrect mazes" in {
+    //Incorrect size
+    an [IllegalArgumentException] should be thrownBy
+      new Maze(Array(Array(Room(South())), Array(Room(North()), Room(North()))))
+
+    //Non-closed from outside
     an [IllegalArgumentException] should be thrownBy
       new Maze(Array(Array(Plain())))
 
+    //Incorrect walls
     an [IllegalArgumentException] should be thrownBy
       new Maze(Array(Array(Room(East()), Plain())))
   }
