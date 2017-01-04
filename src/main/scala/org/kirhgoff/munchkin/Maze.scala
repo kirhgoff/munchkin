@@ -1,17 +1,23 @@
 package org.kirhgoff.munchkin
 
+import scala.collection.mutable
+
 trait MazeCell {
+  def walls():List[Direction]
   def hasWallAt(direction: Direction):Boolean
 }
 
 //Could go to all 4 sides
 case class Plain() extends MazeCell {
   override def hasWallAt(direction: Direction) = false
+  override def walls(): List[Direction] = Direction.all
 }
 //Only one entrance
 case class Room(entrance:Direction) extends MazeCell {
   override def hasWallAt(direction: Direction) = direction != entrance
+  override def walls(): List[Direction] = Direction.all.diff(List(entrance))
 }
+//Custom
 case class Cell(walls:List[Direction]) extends MazeCell {
   override def hasWallAt(direction: Direction) = walls.contains(direction)
 }
@@ -31,10 +37,10 @@ class Maze(cells: Array[Array[MazeCell]]) {
     val height = cells(0).length
 
     //Check surrounding walls
-    surroundedFrom(cells(0), West())
-    surroundedFrom(cells(width - 1), East())
-    surroundedFrom(cells.map(_(0)), North())
-    surroundedFrom(cells.map(_(height - 1)), South())
+    surroundedFrom(cells(0), West)
+    surroundedFrom(cells(width - 1), East)
+    surroundedFrom(cells.map(_(0)), North)
+    surroundedFrom(cells.map(_(height - 1)), South)
   }
 
 
@@ -44,10 +50,15 @@ class Maze(cells: Array[Array[MazeCell]]) {
   }
 
   def path (from:Position, to:Position):List[Direction] = {
-
+    val visited = mutable.MutableList()
+    List()
   }
 
-  def wander (from:Position):Position = ???
+  def cellFor(from: Position):MazeCell = ???
+
+  def wander(from:Position):Position = {
+    val cell = cellFor(from)
+  }
 }
 
 
